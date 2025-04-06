@@ -1,0 +1,6 @@
+---
+- name: Configure git
+  ansible.builtin.command:
+    cmd: "stow git"
+    chdir: "{{ dotfiles }}"
+  
