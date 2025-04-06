@@ -1,0 +1,8 @@
+---
+- name: Add aliases
+  ansible.builtin.lineinfile:
+    path: "{{ home_dir }}/.bashrc.d/aliases"
+    create: True
+    line: "source ${HOME}/.aliases"
+  when: ansible_distribution == "Fedora"
+  changed_when: false

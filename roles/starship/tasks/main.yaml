@@ -1,0 +1,27 @@
+---
+- name: Enable Starship COPR
+  community.general.copr:
+    name: atim/starship
+    state: enabled
+  become: True
+  become_user: root
+
+- name: Install Starship
+  ansible.builtin.package:
+    name:
+      - starship
+  become: True
+  become_user: root
+
+- name: Configure Starship
+  ansible.builtin.command:
+    cmd: "stow starship"
+    chdir: "{{ dotfiles }}"
+  changed_when: False
+
+- name: Configure Bash
+  ansible.builtin.blockinfile:
+    path: "{{ home_dir }}/.bashrc.d/starship"
+    create: True
+    block: |
+      eval "$(starship init bash)"

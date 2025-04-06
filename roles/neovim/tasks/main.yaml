@@ -1,0 +1,19 @@
+---
+- name: Download latest Neovim Release
+  ansible.builtin.get_url:
+    url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.appimage
+    dest: "{{ home_dir }}/bin"
+    mode: '0770' 
+
+- name: Link shortcut
+  ansible.builtin.file:
+    src: "{{ home_dir }}/bin/nvim-linux-x86_64.appimage"
+    dest: "{{ home_dir }}/bin/nvim"
+    state: link
+
+- name: Install config
+  ansible.builtin.command:
+    cmd: stow nvim
+    chdir: "{{ dotfiles }}"
+  changed_when: False
+

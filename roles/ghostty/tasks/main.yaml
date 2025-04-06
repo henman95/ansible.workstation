@@ -1,0 +1,20 @@
+---
+- name: Enable Ghostty COPR
+  community.general.copr:
+    name: pgdev/ghostty
+    state: enabled
+  become: True
+  become_user: root
+
+- name: Install Ghostty
+  ansible.builtin.package:
+    name:
+      - ghostty
+  become: True
+  become_user: root
+
+- name: Configure Ghostty
+  ansible.builtin.command:
+    cmd: "stow ghostty"
+    chdir: "{{ dotfiles }}"
+  changed_when: False

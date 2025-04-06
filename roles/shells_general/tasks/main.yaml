@@ -1,0 +1,8 @@
+---
+- name: Add Aliases
+  ansible.builtin.command:
+    cmd: "stow shells_general"
+    chdir: "{{ dotfiles }}"
+  changed_when: False
+
+

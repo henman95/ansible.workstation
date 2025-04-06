@@ -1,0 +1,73 @@
+---
+## TODO:
+## - Bash setup (aliases)
+## - Git configuratio  (user \ email)
+
+- hosts: localhost
+  user: root
+  collections:
+    - ansible.builtin
+  
+  pre_tasks:
+    - block:
+      - name: Set Basic Facts
+        ansible.builtin.set_fact:
+          home_dir: "{{ ansible_env.HOME }}"
+          dotfiles: "{{ ansible_env.HOME }}/dotfiles"
+
+      - name: Show Facts
+        vars:
+          msg: |
+            Home     :  {{ home_dir }}
+            dotfiles :  {{ dotfiles }}
+        ansible.builtin.debug:
+          msg: "{{ msg.split('\n') }}"
+
+      - name: Set Hostname
+        ansible.builtin.hostname:
+          name: zra-hbennett-l1.spirentcom.com
+      
+      - name: Basic Directories
+        ansible.builtin.file:
+          path: "{{ item }}"
+          state: directory
+        loop:
+          - "{{ home_dir }}/bin"
+          - "{{ home_dir }}/.bashrc.d"
+      tags: always
+
+    - name: Update Sudo
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/hbennett
+        create: yes
+        line: "hbennett ALL=(ALL) NOPASSWD: ALL"
+      become: yes
+      become_user: root
+
+    - name: Basic Packages
+      ansible.builtin.package:
+        name:
+          - stow
+          - wireshark
+          - wireshark-cli
+        state: present
+      become: yes
+      become_user: root 
+
+  roles:
+    - role: fedora_development
+    - role: dotfiles
+    - role: ghostty
+    - role: lazydocker
+    - role: lazygit
+    - role: neovim
+    - role: secureshell
+      tags:
+        - ssh
+    - role: shells_general
+    - role: shells_bash
+    - role: starship
+    - role: system_settings
+
+  tasks:
+

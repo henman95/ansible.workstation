@@ -1,0 +1,14 @@
+---
+- name: Enable Lazygit COPR
+  community.general.copr:
+    name: atim/lazydocker
+    state: enabled
+  become: True
+  become_user: root
+
+- name: Install Lazygit
+  ansible.builtin.package:
+    name:
+      - lazydocker
+  become: True
+  become_user: root
