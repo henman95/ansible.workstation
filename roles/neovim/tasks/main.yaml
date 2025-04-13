@@ -5,6 +5,13 @@
     dest: "{{ home_dir }}/bin"
     mode: '0770' 
 
+- name: Install requirements
+  ansible.builtin.package:
+    name:
+      - ripgrep
+  become: True
+  become_user: root
+
 - name: Link shortcut
   ansible.builtin.file:
     src: "{{ home_dir }}/bin/nvim-linux-x86_64.appimage"

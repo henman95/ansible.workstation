@@ -3,4 +3,5 @@
   ansible.builtin.command:
     cmd: "stow git"
     chdir: "{{ dotfiles }}"
+  changed_when: False
   

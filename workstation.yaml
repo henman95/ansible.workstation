@@ -62,9 +62,8 @@
     - role: lazydocker
     - role: lazygit
     - role: neovim
-    - role: secureshell
-      tags:
-        - ssh
+    - role: ssh_client
+    - role: ssh_server
     - role: shells_general
     - role: shells_bash
     - role: starship
