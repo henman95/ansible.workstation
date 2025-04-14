@@ -1,0 +1,63 @@
+---
+- name: System Task
+  block:
+    - name: Install required packages
+      ansible.builtin.package:
+        name:
+          - oathtool
+          - ydotool
+
+    - name: Create Group - uinput
+      ansible.builtin.group:
+        name: uinput
+        state: present
+        system: True
+
+    - name: Add User to group
+      ansible.builtin.user:
+        name: "{{ ansible_env.USER }}"
+        groups: 
+          - uinput
+
+    - name: Create UDEV rule
+      ansible.builtin.lineinfile:
+        path: /etc/udev/rules.d/99-uinput.rules
+        create: True
+        regexp: "^SUBSYSTEM"
+        line: SUBSYSTEM=="misc", KERNEL=="uinput", GROUP="uinput", MODE="0660"
+      notify:
+        - udev_restart
+  become: True
+  become_user: root
+
+- name: Create Systemd Directory
+  ansible.builtin.file:
+    path: "{{ home_dir }}/.config/systemd/user"
+    state: directory
+
+- name: Create Systemd Command
+  ansible.builtin.copy:
+    content: |
+      [Unit]
+      Description=ydotool user daemon
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/ydotoold --socket-path=/var/run/user/{{ uid }}/.ydotool_socket
+      Restart=Always
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: "{{ home_dir }}/.config/systemd/user/ydotool.service"
+  notify: systemd_user_reload
+
+- name: Run Handlers 
+  ansible.builtin.meta: flush_handlers
+
+- name: Start Ydotool daemon
+  ansible.builtin.service:
+    name: ydotool
+    enabled: true
+    state: started
+    scope: user
+

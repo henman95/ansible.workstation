@@ -1,0 +1,11 @@
+---
+- name: udev_restart
+  ansible.builtin.command: "{{ item }}"
+  loop:
+    - /usr/sbin/udevadm control --reload-rules
+    - /usr/sbin/udevadm trigger
+  become: True
+  become_user: root
+
+- name: systemd_user_reload
+  ansible.builtin.command: systemctl --user daemon-reload

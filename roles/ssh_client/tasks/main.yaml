@@ -1,0 +1,20 @@
+---
+- name: Check if SecureSHell is dotfile
+  ansible.builtin.stat:
+    path: "{{ home_dir }}/.ssh/config"
+  register: config_stat
+
+- name: Set Crypto policy to Legacy
+  ansible.builtin.command:
+    cmd: update-crypto-policies --set LEGACY
+  changed_when: False
+  become: True
+  become_user: root
+
+- name: Configure Secure Shell
+  ansible.builtin.command:
+    cmd: "stow ssh"
+    chdir: "{{ dotfiles }}"
+  when: (config_stat.stat.islnk is defined and config_stat.stat.islnk) or config_stat.stat.exists == False
+  changed_when: False
+

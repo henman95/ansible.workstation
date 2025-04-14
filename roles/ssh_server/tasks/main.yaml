@@ -1,0 +1,15 @@
+---
+- name: Install and Configurre SecureShell Server
+  block:
+    - name: Install packages
+      ansible.builtin.package:
+        name:
+          - openssh-server
+
+    - name: Enable Daemon
+      ansible.builtin.service:
+        name: sshd
+        enabled: True
+        state: started
+  become: True
+  become_user: root

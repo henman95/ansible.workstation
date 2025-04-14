@@ -14,6 +14,8 @@
         ansible.builtin.set_fact:
           home_dir: "{{ ansible_env.HOME }}"
           dotfiles: "{{ ansible_env.HOME }}/dotfiles"
+          username: "{{ ansible_env.USER }}"
+          uid: "{{ ansible_user_uid }}"
 
       - name: Show Facts
         vars:
@@ -62,12 +64,14 @@
     - role: lazydocker
     - role: lazygit
     - role: neovim
+    - role: onelogin
     - role: ssh_client
     - role: ssh_server
     - role: shells_general
     - role: shells_bash
     - role: starship
     - role: system_settings
+    - role: ydotool
 
   tasks:
 

@@ -1,0 +1,28 @@
+---
+- name: Install required packages
+  ansible.builtin.package:
+    name:
+      - oathtool
+  become: True
+  become_user: root
+
+- name: Onlogin script - onelogin
+  ansible.builtin.copy:
+    content: |
+      #!/bin/bash
+      SECRET=$(cat ~/.onelogin.totp)
+      CODE=$(oathtool -b --totp ${SECRET})
+      echo ${CODE}
+    dest: "{{ home_dir}}/bin/onelogin"
+    mode: "0760"
+ 
+- name: Onlogin script - onelogin.totp
+  ansible.builtin.copy:
+    content: |
+      #!/bin/bash
+      SECRET=$(cat ~/.onelogin.totp)
+      CODE=$(oathtool -b --totp ${SECRET})
+      ydotool type ${CODE}
+      ydotool key 28:1 28:0 
+    dest: "{{ home_dir}}/bin/onelogin.totp"
+    mode: "0760"
