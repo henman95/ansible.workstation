@@ -1,10 +1,11 @@
 ---
-- name: Enable Ghostty COPR
+- name: Fedora ghostty COPR
   community.general.copr:
     name: pgdev/ghostty
     state: enabled
   become: True
   become_user: root
+  when: os == "Fedora"
 
 - name: Install Ghostty
   ansible.builtin.package:

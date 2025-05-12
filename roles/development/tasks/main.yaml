@@ -1,0 +1,27 @@
+---
+- name: Development Packages
+  vars:
+    packages:
+      Fedora:
+        - golang
+        - gopls
+        - nodejs-npm
+      Archlinux:
+        - base-devel
+        - go
+        - gopls
+        - nodejs
+        - npm
+  ansible.builtin.package:
+    name: "{{ packages[os] }}"
+  become: yes
+  become_user: root
+
+- name: Fedora Packages
+  ansible.builtin.dnf:
+    name:
+      - "@Development Tools"
+  become: yes
+  become_user: root
+  when: os == "Fedora"
+

@@ -1,0 +1,37 @@
+---
+
+- name: ArchLinux
+  block: 
+    - name: Create Service
+      ansible.builtin.blockinfile:
+        path: "{{ home_dir }}/.config/systemd/user/ssh-agent.service"
+        create: true
+        block: |
+          [Unit]
+          Description=SSH key Agent
+
+          [Service]
+          Type=simple
+          Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+          ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+
+          [Install]
+          WantedBy=default.target
+
+    - name: Enable Service
+      ansible.builtin.systemd:
+        name: ssh-agent
+        state: started
+        scope: user
+        daemon_reload: true
+        enabled: true
+
+    - name: Create ssh-agent login profile
+      ansible.builtin.blockinfile:
+        path: /etc/profile.d/ssh-agent.sh
+        create: true
+        block: |
+          export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/ssh-agent.socket
+      become: true
+      become_user: root
+  when: os == "Archlinux"

@@ -1,0 +1,19 @@
+---
+- name: Basic Packages
+  vars:
+    packages:
+      Fedora:
+        - stow
+        - wireshark
+        - wireshark-cli
+      Archlinux:
+        - stow
+        - wireshark-cli
+        - wireshark-qt
+        - nmap
+        - firefox
+
+  ansible.builtin.package:
+    name: "{{ packages[os] }}"
+  become: true
+  become_user: root

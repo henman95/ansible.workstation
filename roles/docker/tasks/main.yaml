@@ -1,0 +1,26 @@
+---
+- name: Install Docker
+  vars:
+    packages:
+      Fedora:
+      Archlinux:
+        - docker
+  ansible.builtin.package:
+    name: "{{ packages[os] }}"
+  become: true
+  become_user: root
+
+- name: Enable and start service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+  become: true
+  become_user: root
+
+- name: Add user to docker
+  ansible.builtin.user:
+    name: "{{ username }}"
+    group: docker
+  become: true
+  become_user: root

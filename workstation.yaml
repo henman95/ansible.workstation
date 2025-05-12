@@ -16,10 +16,13 @@
           dotfiles: "{{ ansible_env.HOME }}/dotfiles"
           username: "{{ ansible_env.USER }}"
           uid: "{{ ansible_user_uid }}"
+          os: "{{ ansible_distribution }}"
+          build_dir: "{{ ansible_env.HOME }}/builds"
 
       - name: Show Facts
         vars:
           msg: |
+            Linux    :  {{ os }}
             Home     :  {{ home_dir }}
             dotfiles :  {{ dotfiles }}
         ansible.builtin.debug:
@@ -46,32 +49,26 @@
       become: yes
       become_user: root
 
-    - name: Basic Packages
-      ansible.builtin.package:
-        name:
-          - stow
-          - wireshark
-          - wireshark-cli
-        state: present
-      become: yes
-      become_user: root 
-
   roles:
-    - role: fedora_development
+    - role: base
+    - role: development
+    - role: git
+    - role: arch_yay
+    - role: ssh_agent
     - role: dotfiles
     - role: ghostty
-    - role: git
+    - role: docker
     - role: lazydocker
-    - role: lazygit
-    - role: neovim
-    - role: onelogin
-    - role: ssh_client
-    - role: ssh_server
-    - role: shells_general
-    - role: shells_bash
-    - role: starship
-    - role: system_settings
-    - role: ydotool
+    # - role: lazygit
+    # - role: neovim
+    # - role: onelogin
+    # - role: ssh_client
+    # - role: ssh_server
+    # - role: shells_general
+    # - role: shells_bash
+    # - role: starship
+    # - role: system_settings
+    # - role: ydotool
 
   tasks:
 

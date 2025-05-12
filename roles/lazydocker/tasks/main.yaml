@@ -1,14 +1,30 @@
 ---
-- name: Enable Lazygit COPR
-  community.general.copr:
-    name: atim/lazydocker
-    state: enabled
-  become: True
-  become_user: root
+- name: Fedora
+  block:
+    - name: Enable Lazygit COPR
+      community.general.copr:
+        name: atim/lazydocker
+        state: enabled
+      become: True
+      become_user: root
 
-- name: Install Lazygit
-  ansible.builtin.package:
-    name:
-      - lazydocker
-  become: True
-  become_user: root
+    - name: Install Lazygit
+      ansible.builtin.package:
+        name:
+          - lazydocker
+      become: True
+      become_user: root
+  when: os == "Fedora"
+
+- name: Archlinux
+  block:
+    - name: Check for command
+      ansible.builtin.stat:
+        path: /usr/bin/lazydocker
+      register: stat
+
+    - name: Install LazyDocker
+      ansible.builtin.command:
+        cmd: "yay -S --noconfirm lazydocker"
+      when: stat.stat.exists is defined and not stat.stat.exists
+  when: os == "Archlinux"

@@ -1,0 +1,28 @@
+---
+- name: Arch Yay
+  block:
+    - name: Create Build directory
+      ansible.builtin.file:
+        path: "{{ build_dir }}"
+        state: directory
+
+    - name: Clone Yay
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/yay.git
+        dest: "{{ build_dir }}/yay"
+      register: git 
+
+    - name: Build Yay
+      ansible.builtin.command:
+        cmd: "makepkg -s" 
+        chdir: "{{ build_dir }}/yay"
+      when: git.changed
+
+    - name: Install Yay
+      ansible.builtin.command:
+        cmd: "makepkg -i --noconfirm" 
+        chdir: "{{ build_dir }}/yay"
+      when: git.changed
+  when: os == "Archlinux"
+
+
