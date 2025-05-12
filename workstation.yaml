@@ -59,7 +59,7 @@
     - role: ghostty
     - role: docker
     - role: lazydocker
-    # - role: lazygit
+    - role: lazygit
     # - role: neovim
     # - role: onelogin
     # - role: ssh_client

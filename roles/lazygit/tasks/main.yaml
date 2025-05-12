@@ -3,12 +3,17 @@
   community.general.copr:
     name: atim/lazygit
     state: enabled
+  when: os == "Fedora"
   become: True
   become_user: root
 
 - name: Install Lazygit
+  vars:
+    packages:
+      Fedora:
+      Archlinux:
+        - lazygit
   ansible.builtin.package:
-    name:
-      - lazygit
+    name: "{{ packages[os] }}"
   become: True
   become_user: root
