@@ -3,13 +3,19 @@
   community.general.copr:
     name: atim/starship
     state: enabled
+  when: os == "Fedora"
   become: True
   become_user: root
 
 - name: Install Starship
+  vars:
+    packages:
+      Fedora:
+        - starship
+      Archlinux:
+        - starship
   ansible.builtin.package:
-    name:
-      - starship
+    name: "{{ packages[os] }}"
   become: True
   become_user: root
 
@@ -21,7 +27,7 @@
 
 - name: Configure Bash
   ansible.builtin.blockinfile:
-    path: "{{ home_dir }}/.bashrc.d/starship"
+    path: "{{ home_dir }}/.bashrc.d/starship.sh"
     create: True
     block: |
       eval "$(starship init bash)"

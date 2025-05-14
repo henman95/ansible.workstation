@@ -4,14 +4,16 @@
     packages:
       Fedora:
         - stow
+        - tree
         - wireshark
         - wireshark-cli
       Archlinux:
+        - firefox
         - stow
+        - tree
         - wireshark-cli
         - wireshark-qt
         - nmap
-        - firefox
 
   ansible.builtin.package:
     name: "{{ packages[os] }}"

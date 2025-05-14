@@ -7,6 +7,7 @@
 - name: Set Crypto policy to Legacy
   ansible.builtin.command:
     cmd: update-crypto-policies --set LEGACY
+  when: os == "Fedora"
   changed_when: False
   become: True
   become_user: root

@@ -1,0 +1,41 @@
+---
+- name: Enable local aliases
+  ansible.builtin.blockinfile:
+    path: /etc/profile.d/aliases.sh
+    create: true
+    block: |
+      LOCAL_ALIAS="${HOME}/.aliases"
+      if [[ -f ${LOCAL_ALIAS} ]]; then
+        . ${LOCAL_ALIAS}
+      fi
+  become: true
+  become_user: root
+
+- name: Add local bash scripts
+  ansible.builtin.blockinfile:
+    path: /etc/profile
+    block: |
+      if [[ -d "${HOME}/.bashrc.d" ]]; then
+        for script in ${HOME}/.bashrc.d/*.sh; do
+          if [ -r "$script" ]; then
+            . "${script}"
+          fi
+        done
+      fi
+  become: true
+  become_user: root
+
+- name: Add local bin
+  ansible.builtin.blockinfile:
+    path: /etc/profile.d/binpath.sh
+    create: true
+    block: |
+      BIN_PATH="${HOME}/bin"
+
+      if [[ -d "${BIN_PATH}" ]]; then
+        if [[ ":${PATH}:" != *":${BIN_PATH}:"* ]]; then
+          export PATH="${PATH}:${BIN_PATH}"
+        fi
+      fi
+  become: true
+  become_user: root

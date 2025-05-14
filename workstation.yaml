@@ -60,13 +60,13 @@
     - role: docker
     - role: lazydocker
     - role: lazygit
-    # - role: neovim
-    # - role: onelogin
-    # - role: ssh_client
-    # - role: ssh_server
-    # - role: shells_general
-    # - role: shells_bash
-    # - role: starship
+    - role: neovim
+    - role: onelogin
+    - role: ssh_client
+    - role: ssh_server
+    - role: shells_general
+    - role: shells_dists
+    - role: starship
     # - role: system_settings
     # - role: ydotool
 

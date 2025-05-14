@@ -1,15 +1,20 @@
 ---
-- name: Install and Configurre SecureShell Server
-  block:
-    - name: Install packages
-      ansible.builtin.package:
-        name:
-          - openssh-server
+- name: SSH Server
+  vars:
+    packages:
+      Fedora:
+        - openssh-server
+      Archlinux:
+        - openssh
+  ansible.builtin.package:
+    name: "{{ packages[os] }}"
+  become: true
+  become_user: root
 
-    - name: Enable Daemon
-      ansible.builtin.service:
-        name: sshd
-        enabled: True
-        state: started
+- name: Enable Daemon
+  ansible.builtin.service:
+    name: sshd
+    enabled: True
+    state: started
   become: True
   become_user: root

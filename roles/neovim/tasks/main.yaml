@@ -1,24 +1,40 @@
 ---
-- name: Download latest Neovim Release
-  ansible.builtin.get_url:
-    url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.appimage
-    dest: "{{ home_dir }}/bin"
-    mode: '0770' 
+- name: Neovim - Fedora
+  block:
+    - name: Download latest Neovim Release
+      ansible.builtin.get_url:
+        url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.appimage
+        dest: "{{ home_dir }}/bin"
+        mode: '0770' 
 
-- name: Install requirements
+    - name: Install requirements
+      ansible.builtin.package:
+        name:
+          - ripgrep
+      become: True
+      become_user: root
+
+    - name: Link shortcut
+      ansible.builtin.file:
+        src: "{{ home_dir }}/bin/nvim-linux-x86_64.appimage"
+        dest: "{{ home_dir }}/bin/nvim"
+        state: link
+
+- name: Install Neovim and related
+  vars:
+    packages:
+      Fedora:
+        - ripgrep
+      Archlinux:
+        - ripgrep
+        - neovim
+        - lua-language-server
   ansible.builtin.package:
-    name:
-      - ripgrep
-  become: True
+    name: "{{ packages[os] }}"
+  become: true
   become_user: root
 
-- name: Link shortcut
-  ansible.builtin.file:
-    src: "{{ home_dir }}/bin/nvim-linux-x86_64.appimage"
-    dest: "{{ home_dir }}/bin/nvim"
-    state: link
-
-- name: Install config
+- name: Install config from dotfiles
   ansible.builtin.command:
     cmd: stow nvim
     chdir: "{{ dotfiles }}"
