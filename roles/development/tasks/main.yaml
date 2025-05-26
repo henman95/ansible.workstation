@@ -20,7 +20,7 @@
 - name: Fedora Packages
   ansible.builtin.dnf:
     name:
-      - "@Development Tools"
+      - "@development-tools"
   become: yes
   become_user: root
   when: os == "Fedora"

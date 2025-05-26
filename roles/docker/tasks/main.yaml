@@ -1,8 +1,20 @@
 ---
+
+- name: Install DockerCE repository
+  ansible.builtin.command:
+    cmd: dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
+    creates: /etc/yum.repos.d/docker-ce.repo
+  register: add_repo
+  changed_when: add_repo.rc == 0
+  when: os == "Fedora"
+  become: true
+  become_user: root
+
 - name: Install Docker
   vars:
     packages:
       Fedora:
+        - docker-ce
       Archlinux:
         - docker
   ansible.builtin.package:
