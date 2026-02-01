@@ -53,7 +53,6 @@
     - role: base
     - role: development
     - role: git
-    - role: arch_yay
     - role: ssh_agent
     - role: dotfiles
     - role: ghostty
@@ -67,8 +66,5 @@
     - role: shells_general
     - role: shells_dists
     - role: starship
-    # - role: system_settings
-    # - role: ydotool
-
   tasks:
 
