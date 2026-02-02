@@ -13,9 +13,3 @@
       - ghostty
   become: True
   become_user: root
-
-- name: Configure Ghostty
-  ansible.builtin.command:
-    cmd: "stow ghostty"
-    chdir: "{{ dotfiles }}"
-  changed_when: False

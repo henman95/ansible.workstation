@@ -3,7 +3,7 @@
   block:
     - name: Download latest Neovim Release
       ansible.builtin.get_url:
-        url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.appimage
+        url: https://github.com/neovim/neovim/releases/download/v0.11.6/nvim-linux-x86_64.appimage
         dest: "{{ home_dir }}/bin"
         mode: '0770' 
 
@@ -33,10 +33,3 @@
     name: "{{ packages[os] }}"
   become: true
   become_user: root
-
-- name: Install config from dotfiles
-  ansible.builtin.command:
-    cmd: stow nvim
-    chdir: "{{ dotfiles }}"
-  changed_when: False
-

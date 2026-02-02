@@ -52,9 +52,7 @@
   roles:
     - role: base
     - role: development
-    - role: git
     - role: ssh_agent
-    - role: dotfiles
     - role: ghostty
     - role: docker
     - role: lazydocker
@@ -63,7 +61,6 @@
     - role: onelogin
     - role: ssh_client
     - role: ssh_server
-    - role: shells_general
     - role: shells_dists
     - role: starship
   tasks:

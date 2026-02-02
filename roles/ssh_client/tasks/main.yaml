@@ -11,11 +11,3 @@
   changed_when: False
   become: True
   become_user: root
-
-- name: Configure Secure Shell
-  ansible.builtin.command:
-    cmd: "stow ssh"
-    chdir: "{{ dotfiles }}"
-  when: (config_stat.stat.islnk is defined and config_stat.stat.islnk) or config_stat.stat.exists == False
-  changed_when: False
-

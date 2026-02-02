@@ -19,12 +19,6 @@
   become: True
   become_user: root
 
-- name: Configure Starship
-  ansible.builtin.command:
-    cmd: "stow starship"
-    chdir: "{{ dotfiles }}"
-  changed_when: False
-
 - name: Configure Bash
   ansible.builtin.blockinfile:
     path: "{{ home_dir }}/.bashrc.d/starship.sh"
